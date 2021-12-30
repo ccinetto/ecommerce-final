@@ -5,5 +5,5 @@ import startDb from './services/db';
 startDb();
 
 app.listen(Config.port, () => {
-  console.log('nada', Config.port);
+  console.log(`Servidor en puerto: ${Config.port}`);
 });

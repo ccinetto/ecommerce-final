@@ -1,6 +1,7 @@
 import express from 'express';
-import { verificaTokenMiddleware } from '../controllers/auth.controller';
+import { authController } from '../controllers/auth.controller';
 import { authRouter } from '../routes/auth.routes';
+import { routerProductos } from '../routes/productos.routes';
 import { routerUsuario } from '../routes/usuario.routes';
 
 const app = express();
@@ -14,8 +15,9 @@ app.get('/', (req, res) => {
 
 app.use('/', authRouter);
 
-app.use(verificaTokenMiddleware);
+app.use(authController.verificaTokenMiddleware);
 
-app.use('/usuario', routerUsuario);
+app.use('/api/usuario', routerUsuario);
+app.use('/api/producto', routerProductos);
 
 export default app;

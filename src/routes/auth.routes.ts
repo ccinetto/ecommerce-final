@@ -1,18 +1,19 @@
 import { Router } from 'express';
-import {
-  loginUsuario,
-  signupUsuario,
-  logoutUsuario,
-} from '../controllers/auth.controller';
-import {
-  paraSiExisteElUsuario,
-  sigueSiExisteElUsuario,
-} from '../controllers/usuario.controller';
+import { authController } from '../controllers/auth.controller';
+import { usuarioController } from '../controllers/usuario.controller';
 
 export const authRouter = Router();
 
-authRouter.post('/signup', paraSiExisteElUsuario, signupUsuario);
+authRouter.post(
+  '/signup',
+  usuarioController.paraSiExisteElUsuario,
+  authController.signupUsuario
+);
 
-authRouter.post('/login', sigueSiExisteElUsuario, loginUsuario);
+authRouter.post(
+  '/login',
+  usuarioController.sigueSiExisteElUsuario,
+  authController.loginUsuario
+);
 
-authRouter.get('/logout', logoutUsuario);
+authRouter.get('/logout', authController.logoutUsuario);

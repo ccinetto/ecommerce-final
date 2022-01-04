@@ -1,17 +1,22 @@
 import { Schema, Document, model, Types } from 'mongoose';
 
-interface IProductoEnCarrito {
-  _id: string;
-  cantidad: number;
-  precio: number;
-}
-
-export interface ICarrito {
+export interface ICarrito extends Document {
   usuario_id: Types.ObjectId;
-  productos: [IProductoEnCarrito];
+  productos: {
+    producto_id: Types.ObjectId;
+    nombre: string;
+    cantidad: number;
+    precio: number;
+  }[];
 }
 
-const carritoSchema = new Schema({
+export interface IOrden {
+  _id: string;
+  precio: number;
+  cantidad: number;
+}
+
+const carritoSchema = new Schema<ICarrito>({
   usuario_id: { type: Schema.Types.ObjectId, ref: 'Usuario', required: true },
   productos: [
     {
@@ -20,10 +25,11 @@ const carritoSchema = new Schema({
         ref: 'Producto',
         required: true,
       },
+      nombre: { type: String, required: true },
       cantidad: { type: Number, required: true },
       precio: { type: Number, required: true },
     },
   ],
 });
 
-export const carritoModel = model('Carrito', carritoSchema);
+export const carritoModel = model<ICarrito>('Carrito', carritoSchema);

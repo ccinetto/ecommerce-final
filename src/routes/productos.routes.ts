@@ -1,25 +1,25 @@
 import { Router } from 'express';
 import { productoController } from '../controllers/producto.controller';
 
-export const routerProductos = Router();
+export const routerProducto = Router();
 
-routerProductos.get('/', productoController.listAllProductos);
+routerProducto.get('/', productoController.listAllProductos);
 
-routerProductos.get(
+routerProducto.get(
   '/:id',
   productoController.paraSiNoExisteElProducto,
   productoController.listaUnProducto
 );
 
-routerProductos.post('/', productoController.creaProducto);
+routerProducto.post('/', productoController.creaProducto);
 
-routerProductos.put(
+routerProducto.put(
   '/:id',
   productoController.paraSiNoExisteElProducto,
   productoController.updateProducto
 );
 
-routerProductos.delete(
+routerProducto.delete(
   '/:id',
   productoController.paraSiNoExisteElProducto,
   productoController.deleteProducto

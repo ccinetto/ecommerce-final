@@ -1,21 +1,17 @@
 import { Request, Response, NextFunction } from 'express';
-import { ICarrito } from '../models/carrito.model';
-import { ILogin, IUsuarioDoc, IUsuarioInput } from '../models/usuario.model';
+import { ILogin, IUsuario } from '../models/usuario.model';
 import { authService } from '../services/auth.service';
 import { carritoService } from '../services/carrito.service';
 import { usuarioService } from '../services/usuario.service';
 
 export class authController {
   static async signupUsuario(req: Request, res: Response) {
-    const entrada: IUsuarioInput = req.body;
-    const nuevoUsuario: IUsuarioDoc = await usuarioService.creaUsuario(entrada);
+    const entrada: IUsuario = req.body;
+    const nuevoUsuario: IUsuario = await usuarioService.creaUsuario(entrada);
     if (nuevoUsuario) {
-      const nuevoCarrito: ICarrito = await carritoService.creaCarrito(
-        nuevoUsuario._id
-      );
+      await carritoService.creaCarrito(nuevoUsuario._id);
       res.status(200).json({
         msg: `Usuario ${nuevoUsuario.email} agregado exitosamente.`,
-        carrito: nuevoCarrito.productos,
       });
     } else {
       res.status(400).json({ msg: `Fallo al registrar usuario` });
@@ -31,7 +27,6 @@ export class authController {
     if (autorizado) {
       const token = await authService.firmaToken(entrada.email);
       req.app.locals.token = token;
-      // updateToken(token);
       res
         .header('auth-token', token)
         .status(201)
@@ -68,5 +63,14 @@ export class authController {
     } else {
       return res.status(401).json({ error: 'No estás autorizado' });
     }
+  }
+
+  static async checkForBody(req: Request, res: Response, next: NextFunction) {
+    if (Object.keys(req.body).length === 0) {
+      return res
+        .status(400)
+        .json({ msg: 'Por favor suministra los datos solicitados' });
+    }
+    next();
   }
 }

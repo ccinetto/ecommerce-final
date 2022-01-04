@@ -6,12 +6,14 @@ export const authRouter = Router();
 
 authRouter.post(
   '/signup',
+  authController.checkForBody,
   usuarioController.paraSiExisteElUsuario,
   authController.signupUsuario
 );
 
 authRouter.post(
   '/login',
+  authController.checkForBody,
   usuarioController.sigueSiExisteElUsuario,
   authController.loginUsuario
 );

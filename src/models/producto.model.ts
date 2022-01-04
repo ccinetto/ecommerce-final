@@ -9,13 +9,28 @@ export interface IProducto extends Document {
   fotos: [string];
 }
 
-const productoSchema = new Schema<IProducto>({
-  nombre: { type: String, required: true },
-  descripcion: { type: String, required: true },
-  categoria: { type: String, required: true },
-  precio: { type: Number, required: true },
-  stock: { type: Number, required: true },
-  fotos: [String],
-});
+export interface ProductoACarritoDto {
+  producto_id: string;
+  nombre: string;
+  cantidad: number;
+  precio: number;
+}
 
-export const productoModel = model('Producto', productoSchema);
+const productoSchema = new Schema<IProducto>(
+  {
+    nombre: { type: String, required: true },
+    descripcion: { type: String, required: true },
+    categoria: { type: String, required: true },
+    precio: { type: Number, required: true },
+    stock: { type: Number, required: true },
+    fotos: [String],
+  },
+  {
+    timestamps: {
+      createdAt: 'createdAt',
+      updatedAt: 'updatedAt',
+    },
+  }
+);
+
+export const productoModel = model<IProducto>('Producto', productoSchema);

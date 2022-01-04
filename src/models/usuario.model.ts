@@ -2,12 +2,21 @@ import { model, Schema, Document, ObjectId } from 'mongoose';
 import bcrypt from 'bcrypt';
 import Config from '../utils/config';
 
-export interface IUsuarioInput {
+// export interface IUsuarioInput {
+//   nombre: string;
+//   email: string;
+//   telefono: string;
+//   password: string;
+//   admin: boolean;
+// }
+
+export interface IUsuario extends Document {
   nombre: string;
   email: string;
   telefono: string;
   password: string;
   admin: boolean;
+  comparePassword(passwordSuministrado: string): Promise<boolean>;
 }
 
 export interface IUsuarioToken {
@@ -23,11 +32,11 @@ export interface ILogin {
   password: string;
 }
 
-export interface IUsuarioDoc extends IUsuarioInput, Document {
-  comparePassword(passwordSuministrado: string): Promise<boolean>;
-}
+// export interface IUsuarioDoc extends IUsuarioInput, Document {
+//   comparePassword(passwordSuministrado: string): Promise<boolean>;
+// }
 
-const usuarioSchema = new Schema({
+const usuarioSchema = new Schema<IUsuario>({
   nombre: { type: String, required: true },
   email: {
     type: String,
@@ -57,4 +66,4 @@ usuarioSchema.methods.comparePassword = async function (
     .catch(e => false);
 };
 
-export const usuarioModel = model<IUsuarioDoc>('Usuario', usuarioSchema);
+export const usuarioModel = model<IUsuario>('Usuario', usuarioSchema);

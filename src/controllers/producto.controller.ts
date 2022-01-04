@@ -9,13 +9,36 @@ export class productoController {
     res: Response,
     next: NextFunction
   ) {
-    const id = req.params.id;
-    const existe = await productoService.existeProducto(id);
+    const id = req.body.producto_id;
+    const existe = await productoService.listaUnProductoPorId(id);
     if (!existe) {
-      return res.status(400).json({ msg: `No existe el producto ${id}` });
-    } else {
-      next();
+      return res
+        .status(400)
+        .json({ msg: `El producto ${id} no se encuentra registrado` });
     }
+    next();
+  }
+
+  static async productoACarrito(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    const producto_id = req.body.producto_id;
+    console.log(producto_id);
+    const cantidad = req.body.cantidad;
+    const aCarrito = await productoService.preparaProductoParaCarrito(
+      producto_id,
+      cantidad
+    );
+    console.log(aCarrito);
+    if (!aCarrito) {
+      return res.status(400).json({
+        msg: `No hay suficientes existencias del producto ${producto_id}`,
+      });
+    }
+    res.locals.aCarrito = aCarrito;
+    next();
   }
 
   // Para los endpoints

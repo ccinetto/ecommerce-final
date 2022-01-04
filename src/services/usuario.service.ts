@@ -1,41 +1,40 @@
 import {
   usuarioModel,
-  IUsuarioInput,
-  IUsuarioDoc,
+  IUsuario,
+  // IUsuarioInput,
+  // IUsuarioDoc,
 } from '../models/usuario.model';
 
 export class usuarioService {
-  static async existeUsuario(email: IUsuarioDoc['email']): Promise<boolean> {
+  static async existeUsuario(email: IUsuario['email']): Promise<boolean> {
     return await usuarioModel.exists({ email });
   }
 
-  static async listaUsuariosTodos(): Promise<IUsuarioDoc[]> {
+  static async listaUsuariosTodos(): Promise<IUsuario[]> {
     const todos = await usuarioModel.find();
     return todos;
   }
 
-  static async creaUsuario(entrada: IUsuarioInput): Promise<IUsuarioDoc> {
+  static async creaUsuario(entrada: IUsuario): Promise<IUsuario> {
     const nuevo = new usuarioModel(entrada);
     nuevo.save();
     return nuevo;
   }
 
   static async encuentraUsuarioPorEmail(
-    email: IUsuarioDoc['email'],
+    email: IUsuario['email'],
     opciones = { lean: false }
-  ): Promise<IUsuarioDoc | null> {
+  ): Promise<IUsuario | null> {
     const usuario = await usuarioModel.findOne({ email }, opciones);
     return usuario;
   }
 
-  static async borraUsuarioPorEmail(
-    email: IUsuarioDoc['email']
-  ): Promise<void> {
+  static async borraUsuarioPorEmail(email: IUsuario['email']): Promise<void> {
     await usuarioModel.findOneAndDelete({ email });
   }
 
   static async autorizadoPorEmail(
-    email: IUsuarioDoc['email'],
+    email: IUsuario['email'],
     passwordSuministrado: string
   ): Promise<boolean> {
     const usuario = await this.encuentraUsuarioPorEmail(email);

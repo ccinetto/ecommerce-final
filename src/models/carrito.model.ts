@@ -10,7 +10,7 @@ export interface ICarrito extends Document {
   }[];
 }
 
-export interface IOrden {
+export interface IElegidos {
   _id: string;
   precio: number;
   cantidad: number;

@@ -1,5 +1,4 @@
-import { Types } from 'mongoose';
-import { carritoModel, ICarrito, IOrden } from '../models/carrito.model';
+import { carritoModel, ICarrito, IElegidos } from '../models/carrito.model';
 import { ProductoACarritoDto } from '../models/producto.model';
 
 export class carritoService {
@@ -38,8 +37,9 @@ export class carritoService {
 
   static async preparaOrden(usuario_id: string) {
     const carrito = await carritoModel.findOne({ usuario_id });
+    console.log(carrito);
     const items = carrito!.productos.map(item => {
-      const contenedor = {} as IOrden;
+      const contenedor = {} as IElegidos;
       contenedor._id = String(item.producto_id);
       contenedor.precio = item.precio;
       contenedor.cantidad = item.cantidad;
@@ -65,7 +65,7 @@ export class carritoService {
 
   static async estaVacio(usuario_id: string): Promise<boolean> {
     const carrito = await carritoModel.findOne({ usuario_id });
-    const vacio = carrito!.productos === [];
+    const vacio = carrito!.productos.length === 0;
     return vacio;
   }
 }

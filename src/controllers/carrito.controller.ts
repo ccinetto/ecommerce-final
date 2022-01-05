@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
-import { IDireccion } from '../models/orden.model';
+import { IDireccion, IOrden } from '../models/orden.model';
+import { usuarioModel } from '../models/usuario.model';
 import { carritoService } from '../services/carrito.service';
+import { ordenService } from '../services/orden.service';
 
 export class carritoController {
   static async listAllCarrito(req: Request, res: Response) {
@@ -33,10 +35,20 @@ export class carritoController {
 
   static async preparaOrden(req: Request, res: Response) {
     const usuario_id = res.locals.verified._id;
-    const email = res.locals.verified.email;
-    const direccion = { ...req.body };
-    const orden = await carritoService.preparaOrden(usuario_id);
-    res.status(200).json({ email, ...orden, direccion });
+    const email: string = res.locals.verified.email;
+    const direccion: IDireccion = { ...req.body };
+    const carrito = await carritoService.preparaOrden(usuario_id);
+    console.log(carrito);
+    const payload: IOrden = {
+      usuario_id,
+      email,
+      ...carrito,
+      estado: 'generado',
+      direccion,
+    };
+    const orden = await ordenService.creaOrden(payload);
+    await carritoService.vaciaCarrito(usuario_id);
+    res.status(200).json({ orden });
   }
 
   // Middlewares
@@ -45,7 +57,7 @@ export class carritoController {
     res: Response,
     next: NextFunction
   ) {
-    if (await carritoService.estaVacio(res.locals.verified.usuario_id)) {
+    if (await carritoService.estaVacio(res.locals.verified._id)) {
       return res.status(400).json({ msg: 'El carrito no tiene productos' });
     }
     next();

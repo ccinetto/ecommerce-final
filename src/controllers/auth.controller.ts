@@ -25,6 +25,7 @@ export class authController {
       entrada.password
     );
     if (autorizado) {
+      console.log('acapaso');
       const token = await authService.firmaToken(entrada.email);
       req.app.locals.token = token;
       res
@@ -32,6 +33,7 @@ export class authController {
         .status(201)
         .json({ msg: `Bienvenido ${entrada.email}` });
     } else {
+      console.log('acanopaso');
       res.status(401).json({ msg: `No estás autorizado` });
     }
   }

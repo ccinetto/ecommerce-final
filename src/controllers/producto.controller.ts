@@ -9,7 +9,7 @@ export class productoController {
     res: Response,
     next: NextFunction
   ) {
-    const id = req.body.producto_id;
+    const id = req.body.producto_id || req.params.id;
     const existe = await productoService.listaUnProductoPorId(id);
     if (!existe) {
       return res
@@ -25,13 +25,11 @@ export class productoController {
     next: NextFunction
   ) {
     const producto_id = req.body.producto_id;
-    console.log(producto_id);
     const cantidad = req.body.cantidad;
     const aCarrito = await productoService.preparaProductoParaCarrito(
       producto_id,
       cantidad
     );
-    console.log(aCarrito);
     if (!aCarrito) {
       return res.status(400).json({
         msg: `No hay suficientes existencias del producto ${producto_id}`,
@@ -50,7 +48,23 @@ export class productoController {
   static async listaUnProducto(req: Request, res: Response) {
     const id = req.params.id;
     const uno = await productoService.listaUnProductoPorId(id);
+    if (!uno) {
+      return res.status(400).json({ msg: `No existe el producto ${id}` });
+    }
     res.status(200).json({ usuario: uno });
+  }
+
+  static async listaUnProductoPorCategoria(req: Request, res: Response) {
+    const categoria = req.params.categoria;
+    const varios = await productoService.encuentraProductoPorCategoria(
+      categoria
+    );
+    if (!varios) {
+      return res.status(400).json({
+        msg: `Ningun producto tiene la categoria ${categoria} asignada`,
+      });
+    }
+    res.status(200).json({ categoria: varios });
   }
 
   static async creaProducto(req: Request, res: Response) {

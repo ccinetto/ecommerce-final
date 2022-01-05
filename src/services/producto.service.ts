@@ -1,4 +1,3 @@
-import { Types } from 'mongoose';
 import {
   IProducto,
   ProductoACarritoDto,
@@ -21,7 +20,7 @@ export class productoService {
 
   static async listaUnProductoPorId(id: string): Promise<IProducto | null> {
     // const uno = await productoModel.findOne({ id });
-    const uno = await productoModel.findById(id);
+    const uno = await productoModel.findOne({ _id: id });
     return uno;
   }
 
@@ -51,6 +50,13 @@ export class productoService {
   // pero excluyo ese comportamiento definiendo un middleware
   static async encuentraProductoPorId(id: String): Promise<IProducto | null> {
     const producto = await productoModel.findOne({ id });
+    return producto;
+  }
+
+  static async encuentraProductoPorCategoria(
+    categoria: string
+  ): Promise<IProducto[] | null> {
+    const producto = await productoModel.find({ categoria });
     return producto;
   }
 

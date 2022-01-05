@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" type="text/css" href="public/css/style.css" />
+    <title>Productos y chat</title>
+  </head>
+  <body>
+    <div id="app">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-6 offset-md-3">
+            <h1 class="title-page">Chat en Vuejs</h1>
+
+            <div v-if="loggedIn" class="container-chat">
+              <h2>Hola {{this.email}}</h2>
+              <form @submit.prevent="logoutUser">
+                <input type="submit" value="Logout" class="btn btn-chat" />
+              </form>
+            </div>
+
+            <h2>Chat</h2>
+            <div v-if="!loggedIn" class="container-chat">
+              <form @submit.prevent="loginUser">
+                <input
+                  type="email"
+                  placeholder="Correo del usuario..."
+                  v-model="email"
+                  class="form-control"
+                />
+                <input
+                  type="password"
+                  placeholder="password del usuario..."
+                  v-model="password"
+                  class="form-control"
+                />
+
+                <input type="submit" value="Login" class="btn btn-chat" />
+              </form>
+            </div>
+
+            <div v-if="loggedIn" class="container-chat">
+              <div id="chat" v-for="m in messages">
+                <p class="meta emisor">{{m.author.email}}</p>
+                <span class="tiempo">{{m.createdAt}}</span>
+                <p class="text mensaje">{{m.text}}</p>
+              </div>
+              <!-- con el atributo submit, le indicamos que al usar el input submit llamaremos a la funcíon sendMessage-->
+              <form @submit.prevent="sendMessage">
+                <input
+                  type="text"
+                  placeholder="Mensaje..."
+                  v-model="text"
+                  class="form-control"
+                />
+                <input type="submit" value="Enviar" class="btn btn-chat" />
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.24.0/axios.min.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+      crossorigin="anonymous"
+    ></script>
+    <!-- <script src="/socket.io/socket.io.js"></script> -->
+    <script>
+      //   var socket = io();
+      var app = new Vue({
+        el: '#app',
+        data: {
+          //Inicializamos las variables
+          text: '',
+          email: '',
+          password: '',
+          author: {},
+          messages: [],
+          loggedIn: false,
+        },
+        methods: {
+          /*Creamos la funcion sendMessage, que será la que envíe mediante socket
+                 el mensaje y lo recibiran todos los usuarios en su navegador,
+                 añadiendose éste al  array messages de cada usuario*/
+          creaUsuario: function () {
+            return {
+              email: this.email,
+              // nombre: this.nombre,
+              // apellido: this.apellido,
+              // edad: this.edad,
+              // alias: this.alias,
+              // avatar: this.avatar,
+            };
+          },
+          loginUser: async function () {
+            this.author = this.creaUsuario();
+            // console.log(this.email, this.password);
+            const res = await axios.post('http://localhost:8080/login', {
+              email: this.email,
+              password: this.password,
+            });
+            console.log(res.data);
+
+            // const opcionesRequest = {
+            //   method: 'POST',
+            //   headers: { 'Content-Type': 'application/json' },
+            //   body: JSON.stringify({
+            //     email: this.email,
+            //     password: this.password,
+            //   }),
+            // };
+            // const logueado = await fetch('mensajes/login', opcionesRequest);
+            // socket.emit('loggedUser', this.author);
+            this.loggedIn = true;
+          },
+          logoutUser: async function () {
+            const logout = await axios.get('http://localhost:8080/logout');
+            this.email = '';
+            this.password = '';
+            this.loggedIn = false;
+            console.log(logout.data);
+          },
+          //   sendMessage: function () {
+          //     socket.emit('message', {
+          //       author: this.author,
+          //       text: this.text,
+          //     });
+          //     this.text = '';
+          //   },
+          //   addProducto: function () {
+          //     const producto = {
+          //       title: this.title,
+          //       price: this.price,
+          //       thumbnail: this.thumbnail,
+          //     };
+          //     socket.emit('addedProducto', producto);
+          //     this.title = '';
+          //     this.price = '';
+          //     this.thumbnail = '';
+          //   },
+          // },
+          // // Inicialización de la variable socket
+          // // created: function () {
+          // //   socket = io();
+          // // },
+          // //Se reciben los mensajes y se añaden al array
+          // mounted: function () {
+          //   socket.on('message', function (message) {
+          //     app.messages = message;
+          //   });
+        },
+      });
+    </script>
+  </body>
+</html>

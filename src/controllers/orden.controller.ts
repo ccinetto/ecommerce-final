@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { ordenService } from '../services/orden.service';
 
 export class ordenController {
+  // Middleware que detiene la ejecucion si el orden con el id indicado en el body no existe
   static async paraSiNoExisteLaOrden(
     req: Request,
     res: Response,
@@ -14,7 +15,8 @@ export class ordenController {
     }
     next();
   }
-
+  // Detiene la ejecucion si el estado de la orden es distinto a generado
+  // El id de la orden esta en el body
   static async paraSiNoGenerada(
     req: Request,
     res: Response,
@@ -28,6 +30,8 @@ export class ordenController {
     next();
   }
 
+  // Cambia el estadod e la orden a finalizado
+  // El id de la orden esta en el body
   static async finalizaOrden(req: Request, res: Response) {
     const orden_id = req.body.orden_id;
     const finalizada = await ordenService.finalizaOrden(orden_id);

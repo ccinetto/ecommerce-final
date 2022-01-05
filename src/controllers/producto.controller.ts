@@ -4,6 +4,8 @@ import { productoService } from '../services/producto.service';
 
 export class productoController {
   // Middlewares
+  // Detiene la ejecución si no existe el producto cuya id se indica en el body con req.body.producto_id O en params
+  // con req.params.id
   static async paraSiNoExisteElProducto(
     req: Request,
     res: Response,
@@ -19,6 +21,12 @@ export class productoController {
     next();
   }
 
+  // Middleware donde se preparan los campos de productos usados en el carrito
+  // se requiere un body con:
+  // - producto_id
+  // - cantidad
+  // se guarda en res.local.aCarrito
+  // se detiene la ejecucion  si la cantidad solicitada supera el stock disponible
   static async productoACarrito(
     req: Request,
     res: Response,
@@ -67,6 +75,14 @@ export class productoController {
     res.status(200).json({ categoria: varios });
   }
 
+  // Se requiere un body con:
+  // - nombre
+  // - descripcion
+  // - categoria
+  // - precio
+  // - stock
+  // - fotos (en array)
+  // Genera un 201 si si crea exitosamente el producto
   static async creaProducto(req: Request, res: Response) {
     const payload = req.body;
     if (!payload) {

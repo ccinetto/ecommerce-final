@@ -32,10 +32,6 @@ export interface ILogin {
   password: string;
 }
 
-// export interface IUsuarioDoc extends IUsuarioInput, Document {
-//   comparePassword(passwordSuministrado: string): Promise<boolean>;
-// }
-
 const usuarioSchema = new Schema<IUsuario>({
   nombre: { type: String, required: true },
   email: {
@@ -48,15 +44,16 @@ const usuarioSchema = new Schema<IUsuario>({
   admin: { type: Boolean, required: true },
 });
 
+// El password suministrado se codifica con la librería bcrypt
 usuarioSchema.pre('save', async function (next) {
   const usuario = this;
   if (usuario.isModified('password')) {
-    // const salt = await bcrypt.genSalt(Number(Config.salt_rounds));
     usuario.password = await bcrypt.hash(usuario.password, Config.salt_rounds);
   }
   next();
 });
 
+// Se declara la comparacion de contraseñas como un método asociado al modelo de usuarios
 usuarioSchema.methods.comparePassword = async function (
   passwordSuministrado: string
 ): Promise<boolean> {

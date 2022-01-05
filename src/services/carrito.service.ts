@@ -13,6 +13,10 @@ export class carritoService {
     return newCarrito;
   }
 
+  // La funcion generadora de mas dolores de cabeza con estos pipelines de mongo
+  // Se intenta agregar productos al carrito
+  // Si el producto ya existe en el array productos se incrementa la cantidad
+  // Si el producto aun no estaba en el carrito se pushea al array productos
   static async agregaProductoAlCarrito(
     usuario_id: string,
     productoParaAgregar: ProductoACarritoDto
@@ -22,7 +26,8 @@ export class carritoService {
         usuario_id,
         'productos.producto_id': productoParaAgregar.producto_id,
       },
-      { $inc: { 'productos.$.cantidad': productoParaAgregar.cantidad } }
+      { $inc: { 'productos.$.cantidad': productoParaAgregar.cantidad } },
+      { new: true }
     );
     if (!existente) {
       const actualizado = await carritoModel.findOneAndUpdate(
@@ -35,6 +40,8 @@ export class carritoService {
     }
   }
 
+  // Calcula el precio total de la orden, map reduce al rescate
+  // Intente hacerlo con aggregations de mongoose sin exito
   static async preparaOrden(usuario_id: string) {
     const carrito = await carritoModel.findOne({ usuario_id });
     console.log(carrito);
@@ -51,6 +58,7 @@ export class carritoService {
     return { items, total };
   }
 
+  // Se declara el array productos como vacio, se use depues de haber generado la orden
   static async vaciaCarrito(usuario_id: string) {
     const carrito = await carritoModel.findOne({ usuario_id });
     carrito!.productos = [];
@@ -63,6 +71,7 @@ export class carritoService {
     return carrito;
   }
 
+  //  Controla que esté vacio el carro viendo la longitud del array productos
   static async estaVacio(usuario_id: string): Promise<boolean> {
     const carrito = await carritoModel.findOne({ usuario_id });
     const vacio = carrito!.productos.length === 0;

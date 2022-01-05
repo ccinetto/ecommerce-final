@@ -14,12 +14,14 @@ routerProducto.get(
   productoController.listaUnProductoPorCategoria
 );
 
+// Solo un administrador puede crear un producto
 routerProducto.post(
   '/',
   authController.adminOnly,
   productoController.creaProducto
 );
 
+// Solo un administrador puede editar un producto
 routerProducto.patch(
   '/:id',
   authController.adminOnly,
@@ -27,6 +29,7 @@ routerProducto.patch(
   productoController.updateProducto
 );
 
+// Solo un administrador puede borrar un producto
 routerProducto.delete(
   '/:id',
   authController.adminOnly,

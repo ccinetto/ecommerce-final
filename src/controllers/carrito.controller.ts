@@ -23,7 +23,7 @@ export class carritoController {
     res.status(201).json({ nuevo: nuevo });
   }
 
-  static async agregaProdcutoACarrito(req: Request, res: Response) {
+  static async agregaProductoACarrito(req: Request, res: Response) {
     const usuario_id = res.locals.verified._id;
     const aCarrito = res.locals.aCarrito;
     const actualizado = await carritoService.agregaProductoAlCarrito(
@@ -33,12 +33,18 @@ export class carritoController {
     res.status(200).json({ carrito: actualizado });
   }
 
+  // Se pasa la direccion a traves del req.body:
+  // - calle
+  // - altura
+  // - zipcode (para ahorrar a la hora de escribir)
+  // - piso
+  // - departamento
+  // Calcula el total de los items en el carro, junta toda la info y crea una orden en la colección
   static async preparaOrden(req: Request, res: Response) {
     const usuario_id = res.locals.verified._id;
     const email: string = res.locals.verified.email;
     const direccion: IDireccion = { ...req.body };
     const carrito = await carritoService.preparaOrden(usuario_id);
-    console.log(carrito);
     const payload: IOrden = {
       usuario_id,
       email,
@@ -52,6 +58,7 @@ export class carritoController {
   }
 
   // Middlewares
+  // Detiene ejecución si el carrito está vacío
   static async paraSiEstaVacio(
     req: Request,
     res: Response,

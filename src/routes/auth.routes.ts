@@ -4,6 +4,7 @@ import { usuarioController } from '../controllers/usuario.controller';
 
 export const authRouter = Router();
 
+// Verifica que haya un body en el request, detiene la ejecución si el usuario YA esta registrado, registra un usuario
 authRouter.post(
   '/signup',
   authController.checkForBody,
@@ -11,6 +12,7 @@ authRouter.post(
   authController.signupUsuario
 );
 
+// Verifica que haya un body en el request, detiene la ejecución si el usuario NO esta registrado, loguea un usuario
 authRouter.post(
   '/login',
   authController.checkForBody,
@@ -18,4 +20,5 @@ authRouter.post(
   authController.loginUsuario
 );
 
+// Desloguea un usuario
 authRouter.get('/logout', authController.logoutUsuario);

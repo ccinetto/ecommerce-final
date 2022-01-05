@@ -15,6 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 // Expone los endpoints signup y login
 app.use('/', authRouter);
 
+// Muestra el unico elemento de front
 app.get('/', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../views/index.html'));
 });

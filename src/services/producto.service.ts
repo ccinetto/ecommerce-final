@@ -19,20 +19,18 @@ export class productoService {
   }
 
   static async listaUnProductoPorId(id: string): Promise<IProducto | null> {
-    // const uno = await productoModel.findOne({ id });
     const uno = await productoModel.findOne({ _id: id });
     return uno;
   }
 
+  // Acá se extrae informacion del documento de productos para tener la informacion necesaria para poder incluirlo en el carrito
   static async preparaProductoParaCarrito(
     id: string,
     cantidad: number
   ): Promise<ProductoACarritoDto | null> {
-    // console.log(id);
     const producto = await this.listaUnProductoPorId(id);
     if (producto) {
-      const restante: number = producto.stock - cantidad;
-      // console.log(restante);
+      const restante: number = producto.stock - cantidad; // Verifica que la cantidad que se quiere incluir en el carro no sobrepase el stock
       if (restante >= 0) {
         await producto.updateOne({ stock: restante });
         return {

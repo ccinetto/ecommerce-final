@@ -33,6 +33,7 @@ export class usuarioService {
     await usuarioModel.findOneAndDelete({ email });
   }
 
+  // Acá se usa el metodo comparePasswords definido junto con el esquema,
   static async autorizadoPorEmail(
     email: IUsuario['email'],
     passwordSuministrado: string

@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { authController } from '../controllers/auth.controller';
 import { usuarioController } from '../controllers/usuario.controller';
+import { authValidation } from '../validations/auth.validations';
 
 export const authRouter = Router();
 
@@ -8,6 +9,7 @@ export const authRouter = Router();
 authRouter.post(
   '/signup',
   authController.checkForBody,
+  authValidation.signupValidation,
   usuarioController.paraSiExisteElUsuario,
   authController.signupUsuario
 );

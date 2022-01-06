@@ -1,6 +1,8 @@
 import { Router } from 'express';
 import { authController } from '../controllers/auth.controller';
 import { productoController } from '../controllers/producto.controller';
+import { idValidator } from '../validations/id.validation';
+import { productoValidation } from '../validations/producto.validation';
 
 export const routerProducto = Router();
 
@@ -18,6 +20,7 @@ routerProducto.get(
 routerProducto.post(
   '/',
   authController.adminOnly,
+  productoValidation.agregaProductoValidation,
   productoController.creaProducto
 );
 
@@ -25,7 +28,9 @@ routerProducto.post(
 routerProducto.patch(
   '/:id',
   authController.adminOnly,
+  idValidator,
   productoController.paraSiNoExisteElProducto,
+  productoValidation.modificaProductoValidation,
   productoController.updateProducto
 );
 
@@ -33,6 +38,7 @@ routerProducto.patch(
 routerProducto.delete(
   '/:id',
   authController.adminOnly,
+  idValidator,
   productoController.paraSiNoExisteElProducto,
   productoController.deleteProducto
 );

@@ -8,7 +8,6 @@ export const authRouter = Router();
 // Verifica que haya un body en el request, detiene la ejecución si el usuario YA esta registrado, registra un usuario
 authRouter.post(
   '/signup',
-  authController.checkForBody,
   authValidation.signupValidation,
   usuarioController.paraSiExisteElUsuario,
   authController.signupUsuario
@@ -17,7 +16,7 @@ authRouter.post(
 // Verifica que haya un body en el request, detiene la ejecución si el usuario NO esta registrado, loguea un usuario
 authRouter.post(
   '/login',
-  authController.checkForBody,
+  authValidation.loginValidation,
   usuarioController.sigueSiExisteElUsuario,
   authController.loginUsuario
 );

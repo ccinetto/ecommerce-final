@@ -17,6 +17,7 @@ export class authController {
   // Y emite un status 201
   // Si falla genera un 400
   static async signupUsuario(req: Request, res: Response) {
+    req.app.locals.token = ''; // Reinicio el token
     const entrada: IUsuario = req.body;
     const nuevoUsuario: IUsuario = await usuarioService.creaUsuario(entrada);
     if (nuevoUsuario) {
@@ -38,6 +39,7 @@ export class authController {
   // para el front se encia como un header llamado auth-token
   // Si falla el login emite un 400
   static async loginUsuario(req: Request, res: Response) {
+    req.app.locals.token = ''; // Reinicio el token
     const entrada: ILogin = req.body;
     const autorizado = await usuarioService.autorizadoPorEmail(
       entrada.email,
@@ -93,16 +95,5 @@ export class authController {
     } else {
       return res.status(401).json({ error: 'No estás autorizado' });
     }
-  }
-
-  // Verifica que exista un body al momento de llamar al endpoint
-  // Corta la ejecucion de no ser asi
-  static async checkForBody(req: Request, res: Response, next: NextFunction) {
-    if (Object.keys(req.body).length === 0) {
-      return res
-        .status(400)
-        .json({ msg: 'Por favor suministra los datos solicitados' });
-    }
-    next();
   }
 }

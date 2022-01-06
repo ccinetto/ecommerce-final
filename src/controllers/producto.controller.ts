@@ -67,7 +67,7 @@ export class productoController {
     const varios = await productoService.encuentraProductoPorCategoria(
       categoria
     );
-    if (!varios) {
+    if (varios?.length === 0) {
       return res.status(400).json({
         msg: `Ningun producto tiene la categoria ${categoria} asignada`,
       });

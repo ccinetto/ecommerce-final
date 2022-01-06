@@ -1,6 +1,7 @@
 import { Router } from 'express';
-import { authController } from '../controllers/auth.controller';
 import { ordenController } from '../controllers/orden.controller';
+import { idValidator } from '../validations/id.validation';
+import { ordenValidation } from '../validations/orden.validation';
 
 export const routerOrden = Router();
 
@@ -8,12 +9,12 @@ export const routerOrden = Router();
 routerOrden.get('/', ordenController.listaTodasLasOrdenes);
 
 // Muestra la orden con determinado id
-routerOrden.get('/:id', ordenController.listaUnaOrden);
+routerOrden.get('/:id', idValidator, ordenController.listaUnaOrden);
 
 // Cambia el estado de la orden a finalizado si exite, su estada es generado y su id se indico en el body
 routerOrden.post(
   '/finaliza',
-  authController.checkForBody,
+  ordenValidation.finalizaOrdenValidation,
   ordenController.paraSiNoExisteLaOrden,
   ordenController.paraSiNoGenerada,
   ordenController.finalizaOrden

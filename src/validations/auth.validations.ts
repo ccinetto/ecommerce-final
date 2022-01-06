@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import joi from 'joi';
+import { validationHandler } from './handler.validation';
 
 export class authValidation {
   static async signupValidation(
@@ -12,35 +13,26 @@ export class authValidation {
       email: joi.string().email().required(),
       telefono: joi
         .string()
-        // .pattern(/^(?:00|\\+)[0-9\\s.\\/-]{6,20}$/)
+        .pattern(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im)
+        .messages({
+          'string.pattern.base': `"" debe ser numero telefonico empezando con +`,
+        })
         .required(),
       password: joi.string().min(6).required(),
       admin: joi.boolean().required(),
     });
-    const { error } = signupSchema.validate({ ...req.body });
-    if (error) {
-      switch (error.details[0].context!.key) {
-        case 'nombre':
-          res.status(400).json({ message: error.details[0].message });
-          break;
-        case 'email':
-          res.status(400).json({ message: error.details[0].message });
-          break;
-        case 'telefono':
-          res.status(400).json({ message: error.details[0].message });
-          break;
-        case 'password':
-          res.status(400).json({ message: error.details[0].message });
-          break;
-        case 'admin':
-          res.status(400).json({ message: error.details[0].message });
-          break;
-        default:
-          res.status(500).json({ message: 'An error occurred.' });
-          break;
-      }
-      //   return res.status(400).json({ msg: 'Algo malio sal' });
-    }
-    next();
+    await validationHandler(signupSchema, req, res, next);
+  }
+
+  static async loginValidation(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    const loginSchema = joi.object({
+      email: joi.string().email().required(),
+      password: joi.string().min(6).required(),
+    });
+    await validationHandler(loginSchema, req, res, next);
   }
 }

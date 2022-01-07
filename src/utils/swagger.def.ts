@@ -1,11 +1,13 @@
 import Config from './config';
+import { swAuthRouter } from '../docs/auth.doc';
+import { swProductoRouter } from '../docs/productos.doc';
 
 const swagger = {
   openapi: '3.0.0',
   info: {
-    title: 'Express API',
+    title: 'Ecommerce',
     version: '1.0.0',
-    description: 'The REST API test service',
+    description: 'Backend de un ecommerce con node, express y mongoose',
   },
   servers: [
     {
@@ -13,7 +15,7 @@ const swagger = {
       description: 'Development server',
     },
   ],
-  paths: {},
+  paths: { ...swAuthRouter, ...swProductoRouter },
 };
 
 export default swagger;

@@ -5,7 +5,6 @@ import { authValidation } from '../validations/auth.validations';
 
 export const authRouter = Router();
 
-// Verifica que haya un body en el request, detiene la ejecución si el usuario YA esta registrado, registra un usuario
 authRouter.post(
   '/signup',
   authValidation.signupValidation,
@@ -13,7 +12,6 @@ authRouter.post(
   authController.signupUsuario
 );
 
-// Verifica que haya un body en el request, detiene la ejecución si el usuario NO esta registrado, loguea un usuario
 authRouter.post(
   '/login',
   authValidation.loginValidation,

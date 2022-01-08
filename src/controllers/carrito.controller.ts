@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
 import { IDireccion, IOrden } from '../models/orden.model';
-import { usuarioModel } from '../models/usuario.model';
 import { carritoService } from '../services/carrito.service';
 import { ordenService } from '../services/orden.service';
 
@@ -79,18 +78,15 @@ export class carritoController {
   ) {
     const usuario_id = res.locals.verified._id;
     const producto_id = req.body.producto_id;
-    console.log(usuario_id, producto_id);
     const esta = await carritoService.estaProductoEnCarrito(
       usuario_id,
       producto_id
     );
-    console.log(esta);
     if (!esta) {
       return res
         .status(400)
         .json({ msg: `El producto ${producto_id} no esta en el carrito` });
     }
-    res.locals.encarrito = esta;
     next();
   }
 
@@ -99,8 +95,29 @@ export class carritoController {
     res: Response,
     next: NextFunction
   ) {
-    res.json({ msg: res.locals.encarrito });
-    // const aEliminar = req.body.cantidad
-    // const existente = res.locals.encarrito.cantidad
+    const usuario_id = res.locals.verified._id;
+    const producto_id = req.body.producto_id;
+    const cantidad = req.body.cantidad;
+    const queda = await carritoService.haySuficiente(
+      usuario_id,
+      producto_id,
+      cantidad
+    );
+    if (!queda) {
+      return res.status(400).json({
+        msg: `No hay ${cantidad} productos ${producto_id} en el carrito`,
+      });
+    }
+    next();
+  }
+
+  static async eliminaSiEstaEnCero(req: Request, res: Response) {
+    const usuario_id = res.locals.verified._id;
+    const producto_id = req.body.producto_id;
+    const carrito = await carritoService.eliminaSiEstaEnCero(
+      usuario_id,
+      producto_id
+    );
+    res.status(200).json({ carrito });
   }
 }

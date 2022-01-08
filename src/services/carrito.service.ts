@@ -40,28 +40,6 @@ export class carritoService {
     }
   }
 
-  static async eliminaElProductoDelCarrito(
-    usuario_id: string,
-    productoParaAgregar: ProductoACarritoDto
-  ): Promise<ICarrito | null> {
-    const existente = await carritoModel.findOneAndUpdate(
-      {
-        usuario_id,
-        'productos.producto_id': productoParaAgregar.producto_id,
-      },
-      { $inc: { 'productos.$.cantidad': productoParaAgregar.cantidad } },
-      { new: true }
-    );
-    if (!existente) {
-      const actualizado = await carritoModel.findOneAndUpdate(
-        { usuario_id },
-        { $push: { productos: productoParaAgregar } }
-      );
-      return actualizado;
-    } else {
-      return existente;
-    }
-  }
   // Calcula el precio total de la orden, map reduce al rescate
   // Intente hacerlo con aggregations de mongoose sin exito
   static async preparaOrden(usuario_id: string) {
@@ -109,5 +87,39 @@ export class carritoService {
       'productos.producto_id': producto_id,
     });
     return existe;
+  }
+
+  static async haySuficiente(
+    usuario_id: string,
+    producto_id: string,
+    cambio: number
+  ): Promise<ICarrito | null> {
+    const existe = await carritoModel.findOneAndUpdate(
+      {
+        usuario_id,
+        productos: { $elemMatch: { producto_id, cantidad: { $gte: cambio } } },
+      },
+      { $inc: { 'productos.$.cantidad': -cambio } },
+      { new: true }
+    );
+    return existe;
+  }
+
+  static async eliminaSiEstaEnCero(
+    usuario_id: string,
+    producto_id: string
+  ): Promise<ICarrito | null> {
+    const enCero = await carritoModel.findOneAndUpdate(
+      {
+        usuario_id,
+        productos: { $elemMatch: { producto_id, cantidad: { $eq: 0 } } },
+      },
+      { $pull: { productos: { producto_id } } },
+      { new: true }
+    );
+    if (!enCero) {
+      return await carritoModel.findOne({ usuario_id });
+    }
+    return enCero;
   }
 }

@@ -109,4 +109,11 @@ export class productoController {
     await productoService.actualizaProductoPorId(id, payload);
     res.status(200).json({ msg: `Actualizado el producto ${id}` });
   }
+
+  static async restockPorId(req: Request, res: Response, next: NextFunction) {
+    const producto_id = req.body.producto_id;
+    const cantidad = req.body.cantidad;
+    await productoService.restockPorId(producto_id, cantidad);
+    next();
+  }
 }

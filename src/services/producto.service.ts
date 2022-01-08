@@ -78,6 +78,17 @@ export class productoService {
   }
 
   // Utilities
+  static async restockPorId(id: string, cantidad: number): Promise<void> {
+    await productoModel.findOneAndUpdate(
+      {
+        _id: id,
+      },
+      {
+        $inc: { stock: cantidad },
+      }
+    );
+  }
+
   static async existeProducto(id: string): Promise<boolean> {
     const existe = await productoModel.findOne({ id });
     console.log(existe);

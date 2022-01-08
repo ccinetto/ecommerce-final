@@ -23,7 +23,9 @@ routerCarrito.post(
   carritoValidation.agregaACarritoValidation,
   productoController.paraSiNoExisteElProducto,
   carritoController.estaProductoEnCarrito,
-  carritoController.quedaSuficiente
+  carritoController.quedaSuficiente,
+  productoController.restockPorId,
+  carritoController.eliminaSiEstaEnCero
   // productoController.productoACarrito,
   // carritoController.eliminaProductoEnCarrito
 );

@@ -60,7 +60,7 @@ export class authController {
   // Se desconecta el usuario y se borra el token asociado (lu vuelvo un string vacio)
   static async logoutUsuario(req: Request, res: Response, next: NextFunction) {
     req.app.locals.token = '';
-    res.json({ msg: `Usuario deslogueado` });
+    res.status(200).json({ msg: `Usuario deslogueado` });
   }
 
   // Este middleware es la columna vertebral del sistema, se usa para todas los endpoints

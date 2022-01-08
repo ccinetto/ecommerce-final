@@ -1,6 +1,7 @@
 import Config from './config';
 import { swAuthRouter } from '../docs/auth.doc';
 import { swProductoRouter } from '../docs/productos.doc';
+import { swCarritoRouter } from '../docs/carrito.doc';
 
 const swagger = {
   openapi: '3.0.0',
@@ -15,7 +16,7 @@ const swagger = {
       description: 'Development server',
     },
   ],
-  paths: { ...swAuthRouter, ...swProductoRouter },
+  paths: { ...swAuthRouter, ...swProductoRouter, ...swCarritoRouter },
 };
 
 export default swagger;

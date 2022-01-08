@@ -17,6 +17,17 @@ routerCarrito.post(
   carritoController.agregaProductoACarrito
 );
 
+// Elimino cierta cantidad de productos en el carrito
+routerCarrito.post(
+  '/delete',
+  carritoValidation.agregaACarritoValidation,
+  productoController.paraSiNoExisteElProducto,
+  carritoController.estaProductoEnCarrito,
+  carritoController.quedaSuficiente
+  // productoController.productoACarrito,
+  // carritoController.eliminaProductoEnCarrito
+);
+
 // Si el carrito tiene items y se suministro la direccion crea una orden y guardala en su coleccion
 routerCarrito.post(
   '/checkout',

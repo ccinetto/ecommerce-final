@@ -40,6 +40,28 @@ export class carritoService {
     }
   }
 
+  static async eliminaElProductoDelCarrito(
+    usuario_id: string,
+    productoParaAgregar: ProductoACarritoDto
+  ): Promise<ICarrito | null> {
+    const existente = await carritoModel.findOneAndUpdate(
+      {
+        usuario_id,
+        'productos.producto_id': productoParaAgregar.producto_id,
+      },
+      { $inc: { 'productos.$.cantidad': productoParaAgregar.cantidad } },
+      { new: true }
+    );
+    if (!existente) {
+      const actualizado = await carritoModel.findOneAndUpdate(
+        { usuario_id },
+        { $push: { productos: productoParaAgregar } }
+      );
+      return actualizado;
+    } else {
+      return existente;
+    }
+  }
   // Calcula el precio total de la orden, map reduce al rescate
   // Intente hacerlo con aggregations de mongoose sin exito
   static async preparaOrden(usuario_id: string) {
@@ -76,5 +98,16 @@ export class carritoService {
     const carrito = await carritoModel.findOne({ usuario_id });
     const vacio = carrito!.productos.length === 0;
     return vacio;
+  }
+
+  static async estaProductoEnCarrito(
+    usuario_id: string,
+    producto_id: string
+  ): Promise<ICarrito | null> {
+    const existe = await carritoModel.findOne({
+      usuario_id,
+      'productos.producto_id': producto_id,
+    });
+    return existe;
   }
 }

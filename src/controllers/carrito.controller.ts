@@ -57,6 +57,8 @@ export class carritoController {
     res.status(200).json({ orden });
   }
 
+  static async eliminaProductoEnCarrito(req: Request, res: Response) {}
+
   // Middlewares
   // Detiene ejecución si el carrito está vacío
   static async paraSiEstaVacio(
@@ -68,5 +70,37 @@ export class carritoController {
       return res.status(400).json({ msg: 'El carrito no tiene productos' });
     }
     next();
+  }
+
+  static async estaProductoEnCarrito(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    const usuario_id = res.locals.verified._id;
+    const producto_id = req.body.producto_id;
+    console.log(usuario_id, producto_id);
+    const esta = await carritoService.estaProductoEnCarrito(
+      usuario_id,
+      producto_id
+    );
+    console.log(esta);
+    if (!esta) {
+      return res
+        .status(400)
+        .json({ msg: `El producto ${producto_id} no esta en el carrito` });
+    }
+    res.locals.encarrito = esta;
+    next();
+  }
+
+  static async quedaSuficiente(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    res.json({ msg: res.locals.encarrito });
+    // const aEliminar = req.body.cantidad
+    // const existente = res.locals.encarrito.cantidad
   }
 }

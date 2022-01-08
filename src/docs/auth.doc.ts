@@ -28,9 +28,8 @@ const swLogin = {
 
 const swSignup = {
   tags: ['auth'],
-  summary: 'Crea el usuario',
+  summary: 'Crea el usuario y su carrito de compras asociado',
   description: '',
-  //   operationId: 'addPet',
   consumes: 'application/json',
   produces: 'application/json',
   parameters: [
@@ -53,11 +52,19 @@ const swSignup = {
   },
 };
 
+const swLogout = {
+  tags: ['auth'],
+  summary: 'Termina la sesion del usuario',
+  description: '',
+  responses: {
+    200: {
+      description: 'Sesion terminada',
+    },
+  },
+};
+
 export const swAuthRouter = {
-  '/login': {
-    post: { ...swLogin },
-  },
-  '/signup': {
-    post: { ...swSignup },
-  },
+  '/login': { post: { ...swLogin } },
+  '/signup': { post: { ...swSignup } },
+  '/logout': { get: { ...swLogout } },
 };

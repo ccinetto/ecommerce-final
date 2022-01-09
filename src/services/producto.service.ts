@@ -89,6 +89,21 @@ export class productoService {
     );
   }
 
+  static async agregaImagen(
+    producto_id: string,
+    imagen_id: string
+  ): Promise<IProducto | null> {
+    const producto = productoModel.findOneAndUpdate(
+      {
+        _id: producto_id,
+      },
+      {
+        $push: { fotos: imagen_id },
+      }
+    );
+    return producto;
+  }
+
   static async existeProducto(id: string): Promise<boolean> {
     const existe = await productoModel.findOne({ id });
     console.log(existe);

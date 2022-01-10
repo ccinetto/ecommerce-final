@@ -22,7 +22,7 @@ const checkoutSchema = joi.object({
   departamento: joi.string(),
 });
 
-export const swCheckoutSchema = j2s(checkoutSchema);
+export const swCheckoutSchema = j2s(checkoutSchema).swagger;
 
 export class carritoValidation {
   static async agregaACarritoValidation(

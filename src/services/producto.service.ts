@@ -99,6 +99,9 @@ export class productoService {
       },
       {
         $push: { fotos: imagen_id },
+      },
+      {
+        new: true,
       }
     );
     return producto;
@@ -106,7 +109,7 @@ export class productoService {
 
   static async existeProducto(id: string): Promise<boolean> {
     const existe = await productoModel.findOne({ id });
-    console.log(existe);
+    // console.log(existe);
     if (existe) {
       return true;
     } else {

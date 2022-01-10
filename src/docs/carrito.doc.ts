@@ -5,7 +5,7 @@ import {
 
 const swMuestraCarrito = {
   tags: ['carrito'],
-  summary: 'Muestra una lista de todos los procuctos que estan en el carrito',
+  summary: 'Muestra una lista de todos los productos que estan en el carrito',
   description: '',
   produces: 'application/json',
   responses: {
@@ -26,8 +26,32 @@ const swAgregaACarrito = {
     {
       in: 'body',
       name: 'body',
-      description:
-        'Requiere - nombre, descripcion, categoria, precio, stock, fotos (en array)',
+      description: 'Requiere id y cantidad del producto a agregar',
+      required: true,
+      schema: { ...swAgregaACarritoSchema },
+    },
+  ],
+  responses: {
+    201: {
+      description: 'Producto agregado al carrito',
+    },
+    400: {
+      description: 'No se puede agregar el producto',
+    },
+  },
+};
+
+const swBorraDeCarrito = {
+  tags: ['carrito'],
+  summary: 'Elimina una cierta cantidad de producto en el carrito',
+  description: '',
+  consumes: 'application/json',
+  produces: 'application/json',
+  parameters: [
+    {
+      in: 'body',
+      name: 'body',
+      description: 'Requiere id y cantidad del producto a agregar',
       required: true,
       schema: { ...swAgregaACarritoSchema },
     },
@@ -61,10 +85,10 @@ const swCheckout = {
   ],
   responses: {
     201: {
-      description: 'Producto agregado',
+      description: 'Generada la orden, a la direccion suministrada',
     },
     400: {
-      description: 'No se puede agregar el producto',
+      description: 'No se puede generar la orden',
     },
   },
 };
@@ -74,12 +98,6 @@ export const swCarritoRouter = {
     get: { ...swMuestraCarrito },
   },
   '/api/carrito/add': { post: { ...swAgregaACarrito } },
+  '/api/carrito/delete': { post: { ...swBorraDeCarrito } },
   '/api/carrito/checkout': { post: { ...swCheckout } },
-  //   '/api/produto/{categoria}': {
-  //     get: { ...swMuestraProductosPorCategoria },
-  //   },
-  //   '/api/producto/:id': {
-  //     patch: { ...swModificaProducto },
-  //     delete: { ...swBorraProductoPorId },
-  //   },
 };

@@ -9,6 +9,8 @@ const Config = {
   jwt_secret: process.env.JWT_SECRET,
   session_duration_seconds:
     Number(process.env.SESSION_DURATION_SECONDS) || 3600,
+  ethereal_username: process.env.ETHEREAL_USERNAME,
+  ethereal_password: process.env.ETHEREAL_PASSWORD,
 };
 
 export default Config;

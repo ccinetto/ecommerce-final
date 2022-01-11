@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { ordenService } from '../services/orden.service';
+import { notificationMail } from '../utils/mail';
 
 export class ordenController {
   // Middleware que detiene la ejecucion si el orden con el id indicado en el body no existe
@@ -33,8 +34,10 @@ export class ordenController {
   // Cambia el estadod e la orden a finalizado
   // El id de la orden esta en el body
   static async finalizaOrden(req: Request, res: Response) {
+    const receiver = res.locals.verified.email;
     const orden_id = req.body.orden_id;
     const finalizada = await ordenService.finalizaOrden(orden_id);
+    await notificationMail(receiver, finalizada);
     res.status(200).json({ msg: finalizada });
   }
 

@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { IDireccion, IOrden } from '../models/orden.model';
 import { carritoService } from '../services/carrito.service';
 import { ordenService } from '../services/orden.service';
+import { notificationMail } from '../utils/mail';
 
 export class carritoController {
   static async listAllCarrito(req: Request, res: Response) {
@@ -52,6 +53,7 @@ export class carritoController {
       direccion,
     };
     const orden = await ordenService.creaOrden(payload);
+    await notificationMail(email, orden);
     await carritoService.vaciaCarrito(usuario_id);
     res.status(200).json({ orden });
   }

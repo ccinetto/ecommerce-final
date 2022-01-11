@@ -7,5 +7,7 @@ Estaán presentes cuatro capas:
 - Capa controllers, acá los documentos de la capa anterior se presentan segun la logica de request response de express, de la misma forma se declaran los middleware.
 - Capa routes, acá se construyen los distintos endpoints de la api.
 
+Una lista de los endpoint en localhost/api-docs
+
 ## Autenticacion
 En el login se firma un JSON web token (jwt) que luego se verifica con un middleware aplicado al resto de los endpoints

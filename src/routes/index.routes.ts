@@ -9,12 +9,12 @@ import { routerImagen } from './imagen.routes';
 
 export const router = Router();
 
-router.use('/', authRouter);
+router.use('/api/user', authRouter);
 // Middleware para asegurarse que esta logueado un usuario
 router.use(authController.verificaTokenMiddleware);
 // Endpoints de la api
-router.use('/api/usuario', routerUsuario);
-router.use('/api/producto', routerProducto);
-router.use('/api/carrito', routerCarrito);
-router.use('/api/orden', routerOrden);
-router.use('/api/imagen', routerImagen);
+// router.use('/api/usuario', routerUsuario);
+router.use('/api/products', routerProducto);
+router.use('/api/cart', routerCarrito);
+router.use('/api/order', routerOrden);
+router.use('/api/image', routerImagen);

@@ -13,7 +13,7 @@ routerOrden.get('/:id', idValidator, ordenController.listaUnaOrden);
 
 // Cambia el estado de la orden a finalizado si exite, su estada es generado y su id se indico en el body
 routerOrden.post(
-  '/finaliza',
+  '/complete',
   ordenValidation.finalizaOrdenValidation,
   ordenController.paraSiNoExisteLaOrden,
   ordenController.paraSiNoGenerada,

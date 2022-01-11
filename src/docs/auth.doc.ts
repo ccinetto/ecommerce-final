@@ -1,7 +1,7 @@
 import { swLoginSchema, swSignupSchema } from '../validations/auth.validations';
 
 const swLogin = {
-  tags: ['auth'],
+  tags: ['user'],
   summary: 'Conecta al usuario',
   description: '',
   //   operationId: 'addPet',
@@ -27,7 +27,7 @@ const swLogin = {
 };
 
 const swSignup = {
-  tags: ['auth'],
+  tags: ['user'],
   summary: 'Crea el usuario y su carrito de compras asociado',
   description: '',
   consumes: 'application/json',
@@ -53,7 +53,7 @@ const swSignup = {
 };
 
 const swLogout = {
-  tags: ['auth'],
+  tags: ['user'],
   summary: 'Termina la sesion del usuario',
   description: '',
   responses: {
@@ -64,7 +64,7 @@ const swLogout = {
 };
 
 export const swAuthRouter = {
-  '/login': { post: { ...swLogin } },
-  '/signup': { post: { ...swSignup } },
-  '/logout': { get: { ...swLogout } },
+  '/api/user/login': { post: { ...swLogin } },
+  '/api/user/signup': { post: { ...swSignup } },
+  '/api/user/logout': { get: { ...swLogout } },
 };

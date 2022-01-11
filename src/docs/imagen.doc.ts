@@ -1,5 +1,5 @@
 const swUpload = {
-  tags: ['imagen'],
+  tags: ['image'],
   summary: 'Cambia el estado de la orden a finalizado',
   description: '',
   produces: 'application/json',
@@ -39,7 +39,7 @@ const swUpload = {
 };
 
 const swMuestraUnaImagen = {
-  tags: ['imagen'],
+  tags: ['image'],
   summary: 'Muestra la imagen con el id',
   description: '',
   produces: 'application/json',
@@ -62,7 +62,7 @@ const swMuestraUnaImagen = {
 };
 
 const swBorraUnaImagen = {
-  tags: ['imagen'],
+  tags: ['image'],
   summary: 'Elimina la imagen con el id',
   description: '',
   produces: 'application/json',
@@ -85,10 +85,10 @@ const swBorraUnaImagen = {
 };
 
 export const swImagenRouter = {
-  '/api/imagen/upload': {
+  '/api/image/upload': {
     post: { ...swUpload },
   },
-  '/api/imagen/:id': {
+  '/api/image/:id': {
     get: { ...swMuestraUnaImagen },
     delete: { ...swBorraUnaImagen },
   },

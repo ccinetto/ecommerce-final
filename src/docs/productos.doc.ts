@@ -5,7 +5,7 @@ import {
 } from '../validations/producto.validation';
 
 const swAgregaProducto = {
-  tags: ['producto'],
+  tags: ['products'],
   summary: 'Agrega un producto a la lista de productos',
   description: '',
   consumes: 'application/json',
@@ -31,7 +31,7 @@ const swAgregaProducto = {
 };
 
 const swModificaProducto = {
-  tags: ['producto'],
+  tags: ['products'],
   summary:
     'Cambia uno o varios campos del producto, segun lo que se indique en el body',
   description: '',
@@ -64,7 +64,7 @@ const swModificaProducto = {
 };
 
 const swBorraProductoPorId = {
-  tags: ['producto'],
+  tags: ['products'],
   summary: 'Elimina el producto con el id suministrado',
   description: '',
   produces: 'application/json',
@@ -88,7 +88,7 @@ const swBorraProductoPorId = {
 };
 
 const swMuestraProductosPorCategoria = {
-  tags: ['producto'],
+  tags: ['products'],
   summary: 'Muestra los productos con la categroia correspondiente',
   description: '',
   produces: 'application/json',
@@ -111,7 +111,7 @@ const swMuestraProductosPorCategoria = {
 };
 
 const swMuestraProductos = {
-  tags: ['producto'],
+  tags: ['products'],
   summary: 'Muestra una lista de todos los procuctos',
   description: '',
   produces: 'application/json',
@@ -123,14 +123,14 @@ const swMuestraProductos = {
 };
 
 export const swProductoRouter = {
-  '/api/producto': {
+  '/api/products': {
     get: { ...swMuestraProductos },
     post: { ...swAgregaProducto },
   },
-  '/api/produto/:categoria': {
+  '/api/products/:categoria': {
     get: { ...swMuestraProductosPorCategoria },
   },
-  '/api/producto/:id': {
+  '/api/products/:id': {
     patch: { ...swModificaProducto },
     delete: { ...swBorraProductoPorId },
   },

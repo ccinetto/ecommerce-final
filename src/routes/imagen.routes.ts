@@ -3,6 +3,7 @@ import { Router } from 'express';
 import { productoService } from '../services/producto.service';
 import { upload } from '../utils/upload';
 import Grid from 'gridfs-stream';
+import { authController } from '../controllers/auth.controller';
 
 export const routerImagen = Router();
 
@@ -13,6 +14,8 @@ conn.once('open', function () {
   gfs.collection('imagenes');
   // console.log(gfs);
 });
+
+routerImagen.use(authController.adminOnly);
 
 routerImagen.post('/upload', upload.single('file'), async (req, res) => {
   if (req.file === undefined) {

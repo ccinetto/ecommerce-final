@@ -1,7 +1,7 @@
 import { swFinalizaOrdenSchema } from '../validations/orden.validation';
 
 const swMuestraOrdenes = {
-  tags: ['orden'],
+  tags: ['order'],
   summary: 'Muestra una lista de todas las ordenes',
   description: '',
   produces: 'application/json',
@@ -13,7 +13,7 @@ const swMuestraOrdenes = {
 };
 
 const swMuestraUnaOrden = {
-  tags: ['orden'],
+  tags: ['order'],
   summary: 'Muestra una orden con el id suministrado',
   description: '',
   produces: 'application/json',
@@ -36,7 +36,7 @@ const swMuestraUnaOrden = {
 };
 
 const swFinaliza = {
-  tags: ['orden'],
+  tags: ['order'],
   summary: 'Cambia el estado de la orden a finalizado',
   description: '',
   produces: 'application/json',
@@ -61,13 +61,13 @@ const swFinaliza = {
 };
 
 export const swOrdenRouter = {
-  '/api/orden': {
+  '/api/order': {
     get: { ...swMuestraOrdenes },
   },
-  '/api/orden/:id': {
+  '/api/order/:id': {
     get: { ...swMuestraUnaOrden },
   },
-  '/api/orden/finaliza': {
+  '/api/order/finaliza': {
     post: { ...swFinaliza },
   },
 };

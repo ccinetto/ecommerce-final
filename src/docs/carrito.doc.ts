@@ -4,7 +4,7 @@ import {
 } from '../validations/carrito.validations';
 
 const swMuestraCarrito = {
-  tags: ['carrito'],
+  tags: ['cart'],
   summary: 'Muestra una lista de todos los productos que estan en el carrito',
   description: '',
   produces: 'application/json',
@@ -16,7 +16,7 @@ const swMuestraCarrito = {
 };
 
 const swAgregaACarrito = {
-  tags: ['carrito'],
+  tags: ['cart'],
   summary:
     'Agrega un producto al carrito o incrementa su cantidad si ya estaba en la lista',
   description: '',
@@ -42,7 +42,7 @@ const swAgregaACarrito = {
 };
 
 const swBorraDeCarrito = {
-  tags: ['carrito'],
+  tags: ['cart'],
   summary: 'Elimina una cierta cantidad de producto en el carrito',
   description: '',
   consumes: 'application/json',
@@ -67,7 +67,7 @@ const swBorraDeCarrito = {
 };
 
 const swCheckout = {
-  tags: ['carrito'],
+  tags: ['cart'],
   summary:
     'Crea una orden nueva con los productos que se encuentran en el carrito, luego vacia el carrito',
   description: '',
@@ -94,10 +94,10 @@ const swCheckout = {
 };
 
 export const swCarritoRouter = {
-  '/api/carrito': {
+  '/api/cart': {
     get: { ...swMuestraCarrito },
   },
-  '/api/carrito/add': { post: { ...swAgregaACarrito } },
-  '/api/carrito/delete': { post: { ...swBorraDeCarrito } },
-  '/api/carrito/checkout': { post: { ...swCheckout } },
+  '/api/cart/add': { post: { ...swAgregaACarrito } },
+  '/api/cart/delete': { post: { ...swBorraDeCarrito } },
+  '/api/cart/submit': { post: { ...swCheckout } },
 };

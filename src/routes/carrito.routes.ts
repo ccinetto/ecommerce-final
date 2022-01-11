@@ -32,7 +32,7 @@ routerCarrito.post(
 
 // Si el carrito tiene items y se suministro la direccion crea una orden y guardala en su coleccion
 routerCarrito.post(
-  '/checkout',
+  '/submit',
   carritoController.paraSiEstaVacio,
   carritoValidation.checkoutValidation,
   carritoController.preparaOrden

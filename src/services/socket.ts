@@ -4,15 +4,18 @@ import { mensajeService } from './mensajes.service';
 import server from './server';
 
 const io = new Server(server);
+let momentoConexion: Date;
 
 io.on('connection', socket => {
-  const momentoConexion = new Date(Date.now());
-  console.log(momentoConexion);
-  socket.on('loggedUser', async usr => {
+  socket.on('loggedUser', async email => {
     console.log(`Usuario conectado en ${socket.id}`);
+    momentoConexion = new Date(Date.now());
+    console.log(momentoConexion);
+    console.log(email);
+
     const bienvenida = {
       email: 'sistema',
-      text: mensajeBienvenida(usr.email),
+      text: mensajeBienvenida(email),
     };
     await mensajeService.creaMensaje(bienvenida);
     io.emit(
@@ -25,6 +28,7 @@ io.on('connection', socket => {
     // mensajes.add(msg);
     // console.log(JSON.stringify(await normalizador()));
     // io.emit('message', { sender: 'yo', msg });
+    await mensajeService.creaMensaje(msg);
     io.emit(
       'message',
       await mensajeService.muestraMensajesDesdeAhora(momentoConexion)

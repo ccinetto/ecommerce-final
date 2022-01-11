@@ -115,6 +115,9 @@
               this.loggedIn = true;
               socket.emit('loggedUser', this.email);
             }
+            socket.on('message', function (message) {
+              app.messages = message;
+            });
             this.loggedIn = true;
           },
 
@@ -128,7 +131,6 @@
           sendMessage: function () {
             socket.emit('message', {
               email: this.email,
-              // author: this.author,
               text: this.text,
             });
             this.text = '';

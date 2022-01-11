@@ -1,5 +1,6 @@
 import Config from './utils/config';
-import app from './services/server';
+// import app from './services/server';
+import server from './services/socket';
 import { startDb } from './services/db';
 
 // Me conecto a la base de datos
@@ -8,6 +9,6 @@ import { startDb } from './services/db';
 startDb();
 
 // Levanto el servidor
-app.listen(Config.port, () => {
+server.listen(Config.port, () => {
   console.log(`Servidor en puerto: ${Config.port}`);
 });

@@ -13,7 +13,7 @@
       crossorigin="anonymous"
     />
     <link rel="stylesheet" type="text/css" href="public/css/style.css" />
-    <title>Productos y chat</title>
+    <title>Chat</title>
   </head>
   <body>
     <div id="app">
@@ -51,7 +51,7 @@
 
             <div v-if="loggedIn" class="container-chat">
               <div id="chat" v-for="m in messages">
-                <p class="meta emisor">{{m.author.email}}</p>
+                <p class="meta emisor">{{m.email}}</p>
                 <span class="tiempo">{{m.createdAt}}</span>
                 <p class="text mensaje">{{m.text}}</p>
               </div>
@@ -77,9 +77,9 @@
       integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
       crossorigin="anonymous"
     ></script>
-    <!-- <script src="/socket.io/socket.io.js"></script> -->
+    <script src="/socket.io/socket.io.js"></script>
     <script>
-      //   var socket = io();
+      var socket = io();
       var app = new Vue({
         el: '#app',
         data: {
@@ -87,7 +87,7 @@
           text: '',
           email: '',
           password: '',
-          author: {},
+          // author: {},
           messages: [],
           loggedIn: false,
         },
@@ -107,25 +107,17 @@
           },
           loginUser: async function () {
             this.author = this.creaUsuario();
-            // console.log(this.email, this.password);
-            const res = await axios.post('http://localhost:8080/login', {
+            const usuario = await axios.post('http://localhost:8080/login', {
               email: this.email,
               password: this.password,
             });
-            console.log(res.data);
-
-            // const opcionesRequest = {
-            //   method: 'POST',
-            //   headers: { 'Content-Type': 'application/json' },
-            //   body: JSON.stringify({
-            //     email: this.email,
-            //     password: this.password,
-            //   }),
-            // };
-            // const logueado = await fetch('mensajes/login', opcionesRequest);
-            // socket.emit('loggedUser', this.author);
+            if (usuario) {
+              this.loggedIn = true;
+              socket.emit('loggedUser', this.email);
+            }
             this.loggedIn = true;
           },
+
           logoutUser: async function () {
             const logout = await axios.get('http://localhost:8080/logout');
             this.email = '';
@@ -133,34 +125,36 @@
             this.loggedIn = false;
             console.log(logout.data);
           },
-          //   sendMessage: function () {
-          //     socket.emit('message', {
-          //       author: this.author,
-          //       text: this.text,
-          //     });
-          //     this.text = '';
-          //   },
-          //   addProducto: function () {
-          //     const producto = {
-          //       title: this.title,
-          //       price: this.price,
-          //       thumbnail: this.thumbnail,
-          //     };
-          //     socket.emit('addedProducto', producto);
-          //     this.title = '';
-          //     this.price = '';
-          //     this.thumbnail = '';
-          //   },
-          // },
-          // // Inicialización de la variable socket
-          // // created: function () {
-          // //   socket = io();
-          // // },
-          // //Se reciben los mensajes y se añaden al array
-          // mounted: function () {
-          //   socket.on('message', function (message) {
-          //     app.messages = message;
-          //   });
+          sendMessage: function () {
+            socket.emit('message', {
+              email: this.email,
+              // author: this.author,
+              text: this.text,
+            });
+            this.text = '';
+          },
+        },
+        //   addProducto: function () {
+        //     const producto = {
+        //       title: this.title,
+        //       price: this.price,
+        //       thumbnail: this.thumbnail,
+        //     };
+        //     socket.emit('addedProducto', producto);
+        //     this.title = '';
+        //     this.price = '';
+        //     this.thumbnail = '';
+        //   },
+        // },
+        // // Inicialización de la variable socket
+        // // created: function () {
+        // //   socket = io();
+        // // },
+        // //Se reciben los mensajes y se añaden al array
+        mounted: function () {
+          socket.on('message', function (message) {
+            app.messages = message;
+          });
         },
       });
     </script>

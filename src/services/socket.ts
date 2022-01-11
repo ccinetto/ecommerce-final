@@ -1,5 +1,5 @@
 import { Server } from 'socket.io';
-import { mensajeBienvenida } from '../utils/info.messages';
+import { mensajeBienvenida, procesaMensaje } from '../utils/info.messages';
 import { mensajeService } from './mensajes.service';
 import server from './server';
 
@@ -18,10 +18,12 @@ io.on('connection', socket => {
       text: mensajeBienvenida(email),
     };
     await mensajeService.creaMensaje(bienvenida);
-    io.emit(
-      'message',
-      await mensajeService.muestraMensajesDesdeAhora(momentoConexion)
+    await mensajeService.muestraMensajesDesdeAhora(momentoConexion); // Esto para que lo renderice en tiempo real :S
+    const inicio = await mensajeService.muestraMensajesDesdeAhora(
+      momentoConexion
     );
+    console.log(inicio);
+    io.emit('message', inicio);
   });
 
   socket.on('message', async msg => {
@@ -29,6 +31,14 @@ io.on('connection', socket => {
     // console.log(JSON.stringify(await normalizador()));
     // io.emit('message', { sender: 'yo', msg });
     await mensajeService.creaMensaje(msg);
+    await mensajeService.muestraMensajesDesdeAhora(momentoConexion); // Esto para que lo renderice en tiempo real :S
+    io.emit(
+      'message',
+      await mensajeService.muestraMensajesDesdeAhora(momentoConexion)
+    );
+    const respuesta = await procesaMensaje(msg);
+    await mensajeService.creaMensaje(respuesta);
+    await mensajeService.muestraMensajesDesdeAhora(momentoConexion); // Esto para que lo renderice en tiempo real :S
     io.emit(
       'message',
       await mensajeService.muestraMensajesDesdeAhora(momentoConexion)

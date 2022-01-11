@@ -20,7 +20,7 @@
       <div class="container-fluid">
         <div class="row">
           <div class="col-md-6 offset-md-3">
-            <h1 class="title-page">Chat en Vuejs</h1>
+            <h1 class="title-page">Bienvenidos al ecommerce</h1>
 
             <div v-if="loggedIn" class="container-chat">
               <h2>Hola {{this.email}}</h2>
@@ -114,10 +114,13 @@
             if (usuario) {
               this.loggedIn = true;
               socket.emit('loggedUser', this.email);
+              socket.on('message', function (message) {
+                app.messages = message;
+              });
             }
-            socket.on('message', function (message) {
-              app.messages = message;
-            });
+            // socket.on('message', function (message) {
+            //   app.messages = message;
+            // });
             this.loggedIn = true;
           },
 

@@ -107,7 +107,7 @@
           },
           loginUser: async function () {
             this.author = this.creaUsuario();
-            const usuario = await axios.post('http://localhost:8080/login', {
+            const usuario = await axios.post('http://localhost:8080/api/user/login', {
               email: this.email,
               password: this.password,
             });
@@ -125,7 +125,7 @@
           },
 
           logoutUser: async function () {
-            const logout = await axios.get('http://localhost:8080/logout');
+            const logout = await axios.get('http://localhost:8080/api/user/logout');
             this.email = '';
             this.password = '';
             this.loggedIn = false;

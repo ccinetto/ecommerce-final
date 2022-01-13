@@ -1,0 +1,28 @@
+
+falta el cofnirm password en el campo de signup
+bien el uso del token en el header, pero tambien podrias enviarlo en el body
+
+lo del token que hiciste es una forma interesante de hacerlo, pero por lo general se suele enviar como un header mas en la request
+y vos tenes que buscarlo en ese header el token, no guardarlo en memoria.
+asi como lo haces tiene 2 contras, cuando reinicias el server se acaba la sesion por mas que me diste un token con X fecha de expiracion
+y por otro lado imaginate que tenes 20 servers debajo de un balanceador de carga, la info de la session solo va a estar en 1 solo
+para los otros servers es como que no te logueaste
+
+
+el front tiene mal el endpoint, quedo el viejo
+
+lo que te paso con el socket es lo siguiente
+vos no podes importar el server http varias veces porque cada exportacion que haces es un server totalmente nuevo.
+vos tenes que trabajar con el mismo server siempre. entonces la solucion mas comoda es exportar de websocket una funcion
+que recibe el server http y te lo inicializa el socket.
+luego en index.ts lo exportas una unica vez el server http y lo pones a escuchar a un cierto puerto y usas la funcion del socket
+para inicializarlo
+
+con ese cambio funciono de 10 
+
+
+lo de subir fotos de un producto cuando haces el post a api/products no esta bien hecho, deberia hacerse con los endpoints de image/upload eso
+
+cuando agregas un producto al carrito te trae el viejo
+
+en la docu es mejor poner un ejemplo con data real, no solo el tipo de dato que es
